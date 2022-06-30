@@ -57,14 +57,15 @@ int main( void )
 	auto rode_led = hwlib::target::pin_out( hwlib::target::pins::d11 );
 	auto gele_led = hwlib::target::pin_out( hwlib::target::pins::d10 );
 	auto acknowledge_led = hwlib::target::pin_out( hwlib::target::pins::d9 );
+	auto foute_led = hwlib::target::pin_out( hwlib::target::pins::d8 );
 	auto scl = hwlib::target::pin_oc(hwlib::target::pins::scl);
 	auto sda = hwlib::target::pin_oc(hwlib::target::pins::sda);
 
 
 	hwlib::i2c_bus_bit_banged_scl_sda i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda(scl, sda);
-	TCS34725 kleurtjes(i2c_bus, 2, 1);
+	TCS34725 kleurtjes(i2c_bus, 4, 1);
 	Kleursensor* ding = &kleurtjes;
-	Simon a(*ding, rode_led, blauwe_led, groene_led, gele_led, acknowledge_led);
+	Simon a(*ding, rode_led, blauwe_led, groene_led, gele_led, acknowledge_led, foute_led);
 	connectieTest(*ding);
 	kleurtjes.setHerhalingAccuracy(2);
 	ding->initializer();
