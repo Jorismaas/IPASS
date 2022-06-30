@@ -244,7 +244,7 @@ int TCS34725::colourRead(){
 	hwlib::wait_ms(3);
 	writeData(Enable_address, (Enable_Register::PON | Enable_Register::AEN));
 //	writeData(enable_Register, 0x1b);
-	writeData(RGBCtimingRegister, RGBCTimingRegisterGevoeligheid);
+	//writeData(RGBCtimingRegister, RGBCTimingRegisterGevoeligheid);
 	// 12 / 5 als vervanging van de non int 2.4 die nodig is voor deze formule
 	hwlib::wait_ms((256 - integ_cycles) * 12 / 5 + 1);
 	for(;;){
