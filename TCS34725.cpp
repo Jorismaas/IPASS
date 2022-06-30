@@ -235,7 +235,7 @@ uint16_t TCS34725::value_Colours(const unsigned int kleurSelect){
 	///
 	/// returned rood als 1, blauw als 2, groen als 3, geel als 4
 int TCS34725::colourRead(){
-	int test = 0;
+	//int test = 0;
 	int herhalingKleur = 0;
 	int kleurCode = 0;
 	int minusvalue = 20 * difference_multiplier;
@@ -248,17 +248,17 @@ int TCS34725::colourRead(){
 	// 12 / 5 als vervanging van de non int 2.4 die nodig is voor deze formule
 	hwlib::wait_ms((256 - integ_cycles) * 12 / 5 + 1);
 	for(;;){
-		test += 1;
+		//test += 1;
 		uint16_t Red_value = value_Colours(1);
 		uint16_t Blue_value =  value_Colours(2);
 		uint16_t Green_value =  value_Colours(3);
 		
-		hwlib::cout << "Test " << test << hwlib::endl;
-		hwlib::cout << "Red: " << Red_value << hwlib::endl;
-		hwlib::cout << "Blue: " << Blue_value << hwlib::endl;
-		hwlib::cout << "Green: " << Green_value << hwlib::endl << hwlib::endl;
-		hwlib::cout << "Geel zou werken als: " << Blue_value << "   " << Green_value - minusvalue * yellow_multiplier << "  &&  " <<  Red_value - minusvalue * yellow_multiplier * 2 - minusvalue << "  &&  " << Red_value << "   " << Green_value - minusvalue * yellow_multiplier * 2 << hwlib::endl;
-		hwlib::cout << minusvalue << hwlib::endl;
+		//hwlib::cout << "Test " << test << hwlib::endl;
+		//hwlib::cout << "Red: " << Red_value << hwlib::endl;
+		//hwlib::cout << "Blue: " << Blue_value << hwlib::endl;
+		//hwlib::cout << "Green: " << Green_value << hwlib::endl << hwlib::endl;
+		//hwlib::cout << "Geel zou werken als: " << Blue_value << "   " << Green_value - minusvalue * yellow_multiplier << "  &&  " <<  Red_value - minusvalue * yellow_multiplier * 2 - minusvalue << "  &&  " << Red_value << "   " << Green_value - minusvalue * yellow_multiplier * 2 << hwlib::endl;
+		//hwlib::cout << minusvalue << hwlib::endl;
 		// max count kan met double / max count, colour read functie toevoegen of een timer aan de read
 		// zodat ie Daar wacht tot de register gelezen heeft zodat ie de juiste value pakt en genoeg tijd heeft
 		// gehad, Hue Saturation Intensity
