@@ -24,7 +24,7 @@ i2c_bus(i2c_bus), controlRegisterSet(controlRegisterSet), RGBCTimingRegisterGevo
 
 
 TCS34725::TCS34725(hwlib::i2c_bus_bit_banged_scl_sda &i2c_bus):
-i2c_bus(i2c_bus), controlRegisterSet(0), RGBCTimingRegisterGevoeligheid(0), integ_cycles(0) 
+i2c_bus(i2c_bus), controlRegisterSet(1), RGBCTimingRegisterGevoeligheid(1), integ_cycles(0) 
 {}
 
 	/// \brief
@@ -148,26 +148,31 @@ void TCS34725::RGBCGevoeligheidsset(int RGBCTimingRegisterGevoeligheid){
 		integ_cycles = 256;
 		RGBC_Timing_Register_wait_time = 700;
 		difference_multiplier *= 10;
+		yellow_multiplier = 3;
 	}else if(RGBCTimingRegisterGevoeligheid == 2){
 		writeData(RGBC_Timing_address, RGBC_Timing_Register::stand2);
 		integ_cycles = 64;
 		RGBC_Timing_Register_wait_time = 154;
 		difference_multiplier *= 8;
+		yellow_multiplier = 3;
 	}else if(RGBCTimingRegisterGevoeligheid == 3){
 		writeData(RGBC_Timing_address, RGBC_Timing_Register::stand3);
 		integ_cycles = 42;
 		RGBC_Timing_Register_wait_time = 101;
 		difference_multiplier *= 4;
+		yellow_multiplier = 2;
 	}else if(RGBCTimingRegisterGevoeligheid == 4){
 		writeData(RGBC_Timing_address, RGBC_Timing_Register::stand4);
 		integ_cycles = 10;
 		RGBC_Timing_Register_wait_time = 24;
-		difference_multiplier *= 1;
+		difference_multiplier *= 3;
+		yellow_multiplier = 2;
 	}else{
 		writeData(RGBC_Timing_address, RGBC_Timing_Register::stand5);
 		RGBC_Timing_Register_wait_time = 3;
 		integ_cycles = 1;
-		difference_multiplier *= 1;
+		difference_multiplier *= 3;
+		yellow_multiplier = 1;
 	}
 	
 }
@@ -248,17 +253,18 @@ int TCS34725::colourRead(){
 		uint16_t Blue_value =  value_Colours(2);
 		uint16_t Green_value =  value_Colours(3);
 		
-//		hwlib::cout << "Test " << test << hwlib::endl;
-//		hwlib::cout << "Red: " << Red_value << hwlib::endl;
-//		hwlib::cout << "Blue: " << Blue_value << hwlib::endl;
-//		hwlib::cout << "Green: " << Green_value << hwlib::endl << hwlib::endl;
-		
+		hwlib::cout << "Test " << test << hwlib::endl;
+		hwlib::cout << "Red: " << Red_value << hwlib::endl;
+		hwlib::cout << "Blue: " << Blue_value << hwlib::endl;
+		hwlib::cout << "Green: " << Green_value << hwlib::endl << hwlib::endl;
+		hwlib::cout << "Geel zou werken als: " << Blue_value << "   " << Green_value - minusvalue * yellow_multiplier << "  &&  " <<  Red_value - minusvalue * yellow_multiplier * 2 - minusvalue << "  &&  " << Red_value << "   " << Green_value - minusvalue * yellow_multiplier * 2 << hwlib::endl;
+		hwlib::cout << minusvalue << hwlib::endl;
 		// max count kan met double / max count, colour read functie toevoegen of een timer aan de read
 		// zodat ie Daar wacht tot de register gelezen heeft zodat ie de juiste value pakt en genoeg tijd heeft
 		// gehad, Hue Saturation Intensity
 		// hoeveelheid herhalingen ook kunnen laten aanpassen, nieuwe functie daarvoor
 		// verandering in twee if statements zodat de herhaling beter klopt, herhaling misschien buiten deze functie?
-		if(Blue_value + 300 < (Green_value - minusvalue) && Blue_value + 300 < (Red_value - minusvalue) && Red_value + 1200 > Green_value){
+		if(Blue_value < Green_value - minusvalue * yellow_multiplier && Blue_value < Red_value - minusvalue * 3 && Red_value > Green_value - minusvalue * yellow_multiplier * 2 - minusvalue){
 			herhalingKleur += 1;
 			if(kleurCode != 4){
 				herhalingKleur = 1;
