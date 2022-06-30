@@ -29,6 +29,7 @@ hwlib::target::pin_out &blauwe_led;
 hwlib::target::pin_out &groene_led;
 hwlib::target::pin_out &gele_led;
 hwlib::target::pin_out &actie_gezien_led;
+hwlib::target::pin_out &fout_antwoord_led;
 int level = 0;
 int array[6]{0,0,0,0,0,0};
 int wait_time = 500;
@@ -38,9 +39,9 @@ public:
 	/// Constructor
 	/// \details
 	/// In deze constructor worden alle leds meegegeven, een kleursensor aangegeven die gebruikt zal worden en de difficulty aangegeven.
-Simon(Kleursensor &kleursensor, hwlib::target::pin_out &rode_led, hwlib::target::pin_out &blauwe_led, hwlib::target::pin_out &groene_led, hwlib::target::pin_out &gele_led, hwlib::target::pin_out &actie_led
+Simon(Kleursensor &kleursensor, hwlib::target::pin_out &rode_led, hwlib::target::pin_out &blauwe_led, hwlib::target::pin_out &groene_led, hwlib::target::pin_out &gele_led, hwlib::target::pin_out &actie_led, hwlib::target::pin_out &fout_antwoord_led
 ):
-kleursensor(kleursensor), rode_led(rode_led), blauwe_led(blauwe_led), groene_led(groene_led), gele_led(gele_led), actie_gezien_led(actie_led)
+kleursensor(kleursensor), rode_led(rode_led), blauwe_led(blauwe_led), groene_led(groene_led), gele_led(gele_led), actie_gezien_led(actie_led), fout_antwoord_led(fout_antwoord_led)
 {}
 
 
@@ -105,7 +106,7 @@ void cooleLightShow(int ms_time){
 	/// \details
 	/// zet een lichtje naar keuze aan of uit.
 void licht_aan_uit(uint8_t ledNummer, int ms_time){
-	auto leds = hwlib::port_out_from( rode_led, blauwe_led, groene_led, gele_led, actie_gezien_led );
+	auto leds = hwlib::port_out_from( rode_led, blauwe_led, groene_led, gele_led, actie_gezien_led, fout_antwoord_led );
 	//uint8_t binaireLeds = lednummer;
 	leds.write(ledNummer);
 	leds.flush();
@@ -157,12 +158,15 @@ void simon_says(int difficulty){
 			hwlib::cout << hwlib::endl << "Jouw kleurnummer is: " ;
 			numb = kleursensor.colourRead();
 			// gezien functie van maken
-			licht_aan_uit(0x10, 500);
-			hwlib::wait_ms(500);
 			//
 			if(numb != array[i]){
+				licht_aan_uit(0x20, 500);
 				wrong_answer();
+				
+			}else{
+				licht_aan_uit(0x10, 500);
 			}
+			hwlib::wait_ms(500);
 		}
 	hwlib::cout << "Next_level" << hwlib::endl;
 	correct_answer();
